@@ -1,0 +1,32 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Usuario{
+  id Int @id @default(autoincrement()) // gerar automaticamente de forma incremental
+  email String @unique
+  senha String
+  refeicoes Refeicoes[] // um usuário pode ter varias refeicoes 1:N
+}
+
+model Refeicoes{
+  id Int @id @default(autoincrement())
+  nome String
+  descricao String
+  dataHora DateTime
+  dentroOuForaDaDieta Boolean
+  usuario Usuario @relation(fields: [usuarioId], references: [id]) // relação muitos para um
+  // o fields define uma chave estrangeira entre as tabelas para ligar refeicao ao usuario
+  // o Usuario id aqui no refeicoes corresponde ao id no modelo Usuario
+  usuarioId Int
+
+}
+
+
