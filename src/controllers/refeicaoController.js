@@ -1,11 +1,13 @@
-const prisma = require('@prisma/client').PrismaClient()
+const {PrismaClient} = require('@prisma/client')
+const prisma = new PrismaClient()
+
 
 
 const createRefeicao = async (req, res) => {
 
     const {nome, descricao, dataHora, dentroOuForaDaDieta} = req.body
 
-    const userId = req.usuarioId
+    const usuarioId = req.usuarioId
 
 
     try {
@@ -16,7 +18,7 @@ const createRefeicao = async (req, res) => {
                 descricao,
                 dataHora: new Date(dataHora),
                 dentroOuForaDaDieta,
-                userId
+                usuarioId
             }
         })
 
@@ -97,7 +99,7 @@ try {
         where: { id: parseInt(id) },
     });
 
-    res.status(204).send();
+    res.status(200).json({message: 'Refeição deletada com sucesso'});
     } catch (error) {
         res.status(500).json({ error: 'Erro ao deletar a refeição.' });
     }
@@ -135,13 +137,13 @@ const getRefeicaoById = async (req, res) => {
 
 const getRefeicoes = async (req, res) => {
 
-    const userId = req.usuarioId
+    const usuarioId = req.usuarioId
 
     try {
 
         const refeicoes = await prisma.refeicoes.findMany({
-            where: {userId},
-            orderBy: {date: 'desc'}
+            where: {usuarioId},
+            orderBy: {dataHora: 'desc'}
         })
     
         res.json(refeicoes)

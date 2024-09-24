@@ -1,4 +1,7 @@
-const prisma = require('@prisma/client').PrismaClient()
+
+const {PrismaClient} = require('@prisma/client')
+const prisma = new PrismaClient()
+
 const bycript = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -42,9 +45,9 @@ const loginUsuario = async (req, res) => {
 
         })
 
-        if(user && (await bycript.compare(senha, usuario.senha))){
+        if(user && (await bycript.compare(senha, user.senha))){
 
-            const token = jwt.sign({userId: usuario.id}, 'secret-jwt', {expiresIn: '1h'})
+            const token = jwt.sign({usuarioId: user.id}, 'seu-segredo-jwt', {expiresIn: '7d'})
 
             res.json(token)
 

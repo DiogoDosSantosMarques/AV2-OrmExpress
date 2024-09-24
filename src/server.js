@@ -1,8 +1,9 @@
 const express = require("express")
+const app = express()
+
+
 const userRoutes = require('./routes/userRoutes')
 const refeicoesRoutes = require('./routes/refeicoesRoutes')
-
-const app = express()
 
 
 app.use(express.json())
