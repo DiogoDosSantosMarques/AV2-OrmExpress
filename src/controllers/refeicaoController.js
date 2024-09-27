@@ -39,7 +39,7 @@ const updateRefeicao = async (req, res) => {
 
     const {nome, descricao, dataHora, dentroOuForaDaDieta} = req.body
 
-    const userId = req.usuarioId
+    const usuarioId = req.usuarioId
 
 
     try {
@@ -50,7 +50,7 @@ const updateRefeicao = async (req, res) => {
             where: {id: parseInt(id) },
         })
 
-        if(!refeicao || refeicao.usuarioId !== userId){
+        if(!refeicao || refeicao.usuarioId !== usuarioId){
             return res.status(403).json({error: "Acesso negado"})
         }
 
@@ -67,9 +67,9 @@ const updateRefeicao = async (req, res) => {
             },
 
         })
-
+        
         res.json(updateRefeicao)
-
+        
 
         
     } catch (error) {
@@ -82,7 +82,7 @@ const updateRefeicao = async (req, res) => {
 
 const deleteRefeicao = async(req, res) => {
     const { id } = req.params;
-    const userId = req.usuarioId;
+    const usuarioId = req.usuarioId;
 
 try {
 
@@ -91,7 +91,7 @@ try {
 
     });
 
-    if(!refeicao || refeicao.usuarioId !== userId) {
+    if(!refeicao || refeicao.usuarioId !== usuarioId) {
         return res.status(403).json({ error: 'Acesso negado.'});
     }
 
@@ -110,7 +110,7 @@ try {
 const getRefeicaoById = async (req, res) => {
 
     const {id} = req.params
-    const userId = req.usuarioId
+    const usuarioId = req.usuarioId
 
     try {
 
@@ -120,7 +120,7 @@ const getRefeicaoById = async (req, res) => {
 
         })
 
-        if (!refeicao || refeicao.usuarioId !== userId) {
+        if (!refeicao || refeicao.usuarioId !== usuarioId) {
             return res.status(404).json({ error: 'Refeição não encontrada ou acesso negado.' });
           }
 
@@ -155,6 +155,82 @@ const getRefeicoes = async (req, res) => {
     }
 
 }
+
+
+// const getUsuarioMetricas = async (req, res) => {
+
+//     const usuarioId = req.usuarioId
+
+//     try {
+
+//         // Total de refeições registradas de um usuário
+//         const totalRefeicoes = await prisma.refeicoes.count({
+//             where: {usuarioId}
+//         })
+
+//         console.log('Total de refeições:', totalRefeicoes);
+
+
+//         // Total de refeições que estão dentro da dieta
+//         const refeicoesDentroDaDieta = await prisma.refeicoes.count({
+
+//             where: {usuarioId, dentroOuForaDaDieta: true}
+
+//         })
+
+//         console.log('Refeições dentro da dieta:', refeicoesDentroDaDieta);
+
+
+//         // Total de refeições fora da dieta
+//         const refeicoesForaDaDieta = totalRefeicoes - refeicoesDentroDaDieta
+
+
+//         // Melhor sequência de refeicoes dentro da dieta
+
+//         const refeicoes = await prisma.refeicoes.findMany({
+
+//             where: {usuarioId},
+//             orderBy: {dataHora: 'desc'}
+
+//         })
+
+//         console.log('Refeições encontradas:', refeicoes);
+
+//         let melhorSequencia = 0
+//         let sequenciaAtual = 0
+
+//         refeicoes.forEach((refeicao) => {
+            
+//             if(refeicao.dentroOuForaDaDieta){
+//                 sequenciaAtual++
+
+//                 if(sequenciaAtual > melhorSequencia){
+//                     melhorSequencia = sequenciaAtual
+//                 }
+
+//             } else {
+//                 sequenciaAtual = 0
+//             }
+
+//         })
+
+//         res.json({
+
+//             totalRefeicoes,
+//             refeicoesDentroDaDieta,
+//             refeicoesForaDaDieta,
+//             melhorSequencia
+
+//         })
+
+        
+//     } catch (error) {
+//         console.error('Erro ao recuperar métricas:', error);
+//         res.status(500).json({ error: 'Erro ao recuperar métricas.' });
+//     }
+
+
+// }
 
 module.exports = {createRefeicao, updateRefeicao, deleteRefeicao, getRefeicaoById, getRefeicoes}
 

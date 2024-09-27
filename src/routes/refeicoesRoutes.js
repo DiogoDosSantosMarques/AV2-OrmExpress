@@ -16,4 +16,6 @@ router.get("/:id", authMiddleware, refeicaoController.getRefeicaoById)
 router.get("/", authMiddleware, refeicaoController.getRefeicoes)
 
 
+// router.get('/metricas', authMiddleware, refeicaoController.getUsuarioMetricas)
+
 module.exports = router
